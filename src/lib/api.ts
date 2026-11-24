@@ -83,6 +83,34 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
   return body as T
 }
 
+export type StatsInterval = 'day' | 'week' | 'month'
+export type StatsRange = '7d' | '30d' | '90d' | '1y'
+
+export type StatsPoint = {
+  /** First day of the period, YYYY-MM-DD (weeks start on Monday). */
+  date: string
+  /** Created during this period. */
+  new: number
+  /** Total up to the end of this period. */
+  cumulative: number
+}
+
+export type StatsResponse = {
+  interval: StatsInterval
+  range: StatsRange
+  /** Total right now, including everything before the range. */
+  total: number
+  /** Oldest first; empty periods are included with new = 0. */
+  series: StatsPoint[]
+}
+
+export const statsApi = {
+  users: (range: StatsRange, interval: StatsInterval) =>
+    apiFetch<StatsResponse>(`/admin/stats/users?${new URLSearchParams({ range, interval })}`),
+  scans: (range: StatsRange, interval: StatsInterval) =>
+    apiFetch<StatsResponse>(`/admin/stats/scans?${new URLSearchParams({ range, interval })}`),
+}
+
 export const authApi = {
   login: (phone_number: string, password: string) =>
     apiFetch<LoginResponse>('/auth/login', {

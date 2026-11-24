@@ -1,5 +1,40 @@
 @import 'tailwindcss';
 
+/* Brand colours, taken from the Bustan logo. Use as bg-brand-leaf, text-brand-dark, etc. */
+@theme {
+  --color-brand-dark: #14532d;
+  --color-brand-leaf: #a6d67c;
+  --color-brand-leaf-hover: #93c866;
+  --color-brand-cream: #f6f4ec;
+  /* Dashboard header: a step darker than the leaf, with deeper text to keep contrast. */
+  --color-brand-header: #8cc25f;
+  --color-brand-ink: #0f3d21;
+}
+
+/* Chart colours, checked for contrast against the card surface in each mode
+   (white in light mode, stone-900 #1c1917 in dark mode). */
+:root {
+  --chart-green: #2f7d45;
+  --chart-green-active: #14532d;
+  /* Sky blue sits below 3:1 on white; every chart has a table view as relief. */
+  --chart-sky: #0ea5e9;
+  --chart-sky-active: #0284c7;
+  --chart-grid: #e7e5e4;
+  --chart-axis: #78716c;
+  --chart-cursor: rgb(120 113 108 / 0.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --chart-green: #64a43c;
+    --chart-green-active: #8cc25f;
+    --chart-sky: #0a9ee0;
+    --chart-sky-active: #38bdf8;
+    --chart-grid: #292524;
+    --chart-axis: #a8a29e;
+    --chart-cursor: rgb(168 162 158 / 0.08);
+  }
+}
+
 :root {
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
   color-scheme: light dark;

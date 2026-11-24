@@ -16,7 +16,35 @@ const en = {
 
   'auth.signOut': 'Sign out',
 
-  'dashboard.placeholder': 'Signed in. Dashboards coming next.',
+  'common.retry': 'Try again',
+
+  'range.7d': '7 days',
+  'range.30d': '30 days',
+  'range.90d': '90 days',
+  'range.1y': '1 year',
+  'range.label': 'Time range',
+
+  'scans.title': 'Plant scans',
+  'scans.subtitle': 'New scans per day',
+  'scans.total': 'Total scans',
+  'scans.newInRange': 'New in this period',
+  'scans.new': 'New scans',
+  'scans.empty': 'No scans in this period.',
+
+  'users.title': 'Registered users',
+  'users.subtitle': 'New sign-ups per day',
+  'users.total': 'Total users',
+  'users.newInRange': 'New in this period',
+  'users.new': 'New users',
+  'users.empty': 'No new users in this period.',
+
+  'chart.date': 'Date',
+  'chart.cumulative': 'Total',
+  'chart.showTable': 'Show as table',
+  'chart.hideTable': 'Hide table',
+
+  'errors.loadFailed': 'Could not load the data.',
+  'errors.forbidden': 'This account is not allowed to view this data.',
 
   'errors.invalidCredentials': 'Wrong phone number or password.',
   'errors.notAdmin': 'This account is not an admin account.',
@@ -41,7 +69,35 @@ const ar: Record<TranslationKey, string> = {
 
   'auth.signOut': 'تسجيل الخروج',
 
-  'dashboard.placeholder': 'تم تسجيل الدخول. لوحات المعلومات قادمة قريبًا.',
+  'common.retry': 'إعادة المحاولة',
+
+  'range.7d': '7 أيام',
+  'range.30d': '30 يومًا',
+  'range.90d': '90 يومًا',
+  'range.1y': 'سنة',
+  'range.label': 'الفترة الزمنية',
+
+  'scans.title': 'فحوصات النباتات',
+  'scans.subtitle': 'الفحوصات الجديدة يوميًا',
+  'scans.total': 'إجمالي الفحوصات',
+  'scans.newInRange': 'جديدة في هذه الفترة',
+  'scans.new': 'فحوصات جديدة',
+  'scans.empty': 'لا توجد فحوصات في هذه الفترة.',
+
+  'users.title': 'المستخدمون المسجّلون',
+  'users.subtitle': 'التسجيلات الجديدة يوميًا',
+  'users.total': 'إجمالي المستخدمين',
+  'users.newInRange': 'جدد في هذه الفترة',
+  'users.new': 'مستخدمون جدد',
+  'users.empty': 'لا يوجد مستخدمون جدد في هذه الفترة.',
+
+  'chart.date': 'التاريخ',
+  'chart.cumulative': 'الإجمالي',
+  'chart.showTable': 'عرض كجدول',
+  'chart.hideTable': 'إخفاء الجدول',
+
+  'errors.loadFailed': 'تعذّر تحميل البيانات.',
+  'errors.forbidden': 'هذا الحساب غير مخوّل بعرض هذه البيانات.',
 
   'errors.invalidCredentials': 'رقم الهاتف أو كلمة المرور غير صحيحة.',
   'errors.notAdmin': 'هذا الحساب ليس حساب مسؤول.',

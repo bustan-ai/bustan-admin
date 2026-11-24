@@ -80,7 +80,7 @@ export function LoginPage() {
               placeholder="0933123456"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              className="block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 focus:outline-none rtl:text-right dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+              className="block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-brand-leaf focus:ring-2 focus:ring-brand-leaf/40 focus:outline-none rtl:text-right dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
             />
           </div>
 
@@ -95,7 +95,7 @@ export function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 focus:outline-none dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
+              className="block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 focus:border-brand-leaf focus:ring-2 focus:ring-brand-leaf/40 focus:outline-none dark:border-stone-700 dark:bg-stone-950 dark:text-stone-100"
             />
           </div>
 
@@ -108,7 +108,7 @@ export function LoginPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-lg bg-emerald-700 px-4 py-2 font-medium text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-lg bg-brand-leaf px-4 py-2 font-semibold text-brand-dark transition hover:bg-brand-leaf-hover focus-visible:ring-2 focus-visible:ring-brand-dark focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? t('login.submitting') : t('login.submit')}
           </button>
