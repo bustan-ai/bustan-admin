@@ -1,9 +1,21 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Rectangle,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  type BarShapeProps,
+} from 'recharts'
 import { formatLongDate, formatNumber, formatShortDate } from '../i18n/format'
 import { useLanguage } from '../i18n/useLanguage'
-import { ApiError, statsApi, type StatsPoint, type StatsRange } from '../lib/api'
+import { statsApi, type StatsPoint, type StatsRange } from '../lib/api'
+import { DayGallery } from './DayGallery'
+import { ErrorState } from './ErrorState'
 import { RangePicker } from './RangePicker'
 
 export type StatsMetric = 'users' | 'scans'
@@ -15,11 +27,13 @@ const COLORS: Record<StatsMetric, { bar: string; active: string }> = {
 }
 
 // New items per day for one metric, with the all-time total above the chart.
+// For scans, picking a day shows its photos under the chart.
 export function StatsChart({ metric }: { metric: StatsMetric }) {
   const color = COLORS[metric]
   const { t, language } = useLanguage()
   const [range, setRange] = useState<StatsRange>('30d')
   const [showTable, setShowTable] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
   const query = useQuery({
     queryKey: ['stats', metric, range, 'day'],
@@ -29,6 +43,10 @@ export function StatsChart({ metric }: { metric: StatsMetric }) {
 
   const series = query.data?.series ?? []
   const newInRange = series.reduce((sum, p) => sum + p.new, 0)
+  // Also null when the picked day is outside the current range.
+  const selected = series.find((p) => p.date === selectedDate) ?? null
+  const toggleDay = (date: string) => setSelectedDate((current) => (current === date ? null : date))
+  const onPickDay = metric === 'scans' ? toggleDay : undefined
   const num = (n: number) => formatNumber(language, n)
 
   return (
@@ -97,8 +115,21 @@ export function StatsChart({ metric }: { metric: StatsMetric }) {
                     dataKey="new"
                     name={t(`${metric}.new`)}
                     fill={color.bar}
-                    activeBar={{ fill: color.active }}
                     radius={[4, 4, 0, 0]}
+                    shape={(props: BarShapeProps) => {
+                      const isSelected = selected?.date === (props.payload as StatsPoint).date
+                      return (
+                        <Rectangle
+                          {...props}
+                          fill={isSelected || props.isActive ? color.active : color.bar}
+                          fillOpacity={selected && !isSelected && !props.isActive ? 0.45 : 1}
+                        />
+                      )
+                    }}
+                    // The invisible full-height background makes short columns easy to click.
+                    background={onPickDay ? { fill: 'transparent' } : false}
+                    onClick={onPickDay && ((bar) => onPickDay((bar.payload as StatsPoint).date))}
+                    cursor={onPickDay ? 'pointer' : undefined}
                     maxBarSize={24}
                     isAnimationActive={false}
                   />
@@ -106,6 +137,13 @@ export function StatsChart({ metric }: { metric: StatsMetric }) {
               </ResponsiveContainer>
             )}
           </div>
+
+          {onPickDay && newInRange > 0 && !selected && (
+            <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">{t('gallery.hint')}</p>
+          )}
+          {onPickDay && selected && (
+            <DayGallery key={selected.date} point={selected} onClose={() => setSelectedDate(null)} />
+          )}
 
           <button
             type="button"
@@ -115,7 +153,7 @@ export function StatsChart({ metric }: { metric: StatsMetric }) {
           >
             {showTable ? t('chart.hideTable') : t('chart.showTable')}
           </button>
-          {showTable && <DataTable metric={metric} series={series} />}
+          {showTable && <DataTable metric={metric} series={series} selectedDate={selected?.date} onPickDay={onPickDay} />}
         </>
       )}
     </section>
@@ -143,7 +181,15 @@ function ChartTooltip({ metric, point }: { metric: StatsMetric; point: StatsPoin
   )
 }
 
-function DataTable({ metric, series }: { metric: StatsMetric; series: StatsPoint[] }) {
+type DataTableProps = {
+  metric: StatsMetric
+  series: StatsPoint[]
+  selectedDate?: string
+  /** Makes the dates clickable: the keyboard way to do what clicking a column does. */
+  onPickDay?: (date: string) => void
+}
+
+function DataTable({ metric, series, selectedDate, onPickDay }: DataTableProps) {
   const { t, language } = useLanguage()
   return (
     <div className="mt-2 max-h-72 overflow-y-auto rounded-lg border border-stone-200 dark:border-stone-800">
@@ -158,35 +204,26 @@ function DataTable({ metric, series }: { metric: StatsMetric; series: StatsPoint
         <tbody className="divide-y divide-stone-100 text-stone-800 dark:divide-stone-800 dark:text-stone-200">
           {[...series].reverse().map((p) => (
             <tr key={p.date}>
-              <td className="px-3 py-1.5">{formatLongDate(language, p.date)}</td>
+              <td className="px-3 py-1.5">
+                {onPickDay && p.new > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => onPickDay(p.date)}
+                    aria-pressed={p.date === selectedDate}
+                    className="underline decoration-stone-300 underline-offset-2 hover:decoration-current aria-pressed:font-semibold dark:decoration-stone-600"
+                  >
+                    {formatLongDate(language, p.date)}
+                  </button>
+                ) : (
+                  formatLongDate(language, p.date)
+                )}
+              </td>
               <td className="px-3 py-1.5 text-end">{formatNumber(language, p.new)}</td>
               <td className="px-3 py-1.5 text-end">{formatNumber(language, p.cumulative)}</td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
-  )
-}
-
-function ErrorState({ error, onRetry }: { error: unknown; onRetry: () => void }) {
-  const { t } = useLanguage()
-  const key =
-    error instanceof ApiError && error.status === 403
-      ? 'errors.forbidden'
-      : error instanceof ApiError && error.status === 0
-        ? 'errors.network'
-        : 'errors.loadFailed'
-  return (
-    <div className="flex h-80 flex-col items-center justify-center gap-3 text-sm text-stone-600 dark:text-stone-400">
-      <p role="alert">{t(key)}</p>
-      <button
-        type="button"
-        onClick={onRetry}
-        className="rounded-lg border border-stone-300 px-3 py-1.5 hover:bg-stone-100 dark:border-stone-700 dark:hover:bg-stone-800"
-      >
-        {t('common.retry')}
-      </button>
     </div>
   )
 }

@@ -111,6 +111,29 @@ export const statsApi = {
     apiFetch<StatsResponse>(`/admin/stats/scans?${new URLSearchParams({ range, interval })}`),
 }
 
+export type AdminScan = {
+  code_user_scan: string
+  created_at: string
+  /** Temporary links: they stop working after an hour. */
+  image_url: string
+  thumbnail_url: string
+  /** Who took the photo. */
+  code_user: string
+  /** What the analysis found (only the fields used here); texts are in Arabic. */
+  result: { plant_name: string | null; headline: string }
+}
+
+export type AdminScanList = {
+  /** Newest first. */
+  items: AdminScan[]
+}
+
+export const scansApi = {
+  /** Scans of all users between two days (YYYY-MM-DD), both included. */
+  between: (from: string, to: string) =>
+    apiFetch<AdminScanList>(`/admin/scans?${new URLSearchParams({ from, to })}`),
+}
+
 export const authApi = {
   login: (phone_number: string, password: string) =>
     apiFetch<LoginResponse>('/auth/login', {

@@ -21,6 +21,18 @@ export function formatShortDate(language: Language, value: string): string {
   return new Intl.DateTimeFormat(locale(language), { day: 'numeric', month: 'short' }).format(parseDay(value))
 }
 
+// Same time zone as the API's days (its stats_timezone), so times match the day they are listed under.
+const API_TIME_ZONE = 'Asia/Damascus'
+
+/** Time of day of an API timestamp. */
+export function formatTime(language: Language, value: string): string {
+  return new Intl.DateTimeFormat(locale(language), {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: API_TIME_ZONE,
+  }).format(new Date(value))
+}
+
 export function formatLongDate(language: Language, value: string): string {
   return new Intl.DateTimeFormat(locale(language), {
     weekday: 'short',
