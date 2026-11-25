@@ -17,6 +17,7 @@ const en = {
   'auth.signOut': 'Sign out',
 
   'common.retry': 'Try again',
+  'common.close': 'Close',
 
   'range.7d': '7 days',
   'range.30d': '30 days',
@@ -30,6 +31,15 @@ const en = {
   'scans.newInRange': 'New in this period',
   'scans.new': 'New scans',
   'scans.empty': 'No scans in this period.',
+
+  'gallery.title': 'Photos',
+  'gallery.hint': 'Click a column to see the photos of that day.',
+  'gallery.removed': 'Removed by users, not shown',
+  'gallery.empty': 'No photos to show for this day.',
+  'gallery.unknownPlant': 'Unknown plant',
+  'gallery.previous': 'Previous',
+  'gallery.next': 'Next',
+  'gallery.photoFailed': 'Could not load the photo.',
 
   'users.title': 'Registered users',
   'users.subtitle': 'New sign-ups per day',
@@ -70,6 +80,7 @@ const ar: Record<TranslationKey, string> = {
   'auth.signOut': 'تسجيل الخروج',
 
   'common.retry': 'إعادة المحاولة',
+  'common.close': 'إغلاق',
 
   'range.7d': '7 أيام',
   'range.30d': '30 يومًا',
@@ -83,6 +94,15 @@ const ar: Record<TranslationKey, string> = {
   'scans.newInRange': 'جديدة في هذه الفترة',
   'scans.new': 'فحوصات جديدة',
   'scans.empty': 'لا توجد فحوصات في هذه الفترة.',
+
+  'gallery.title': 'الصور',
+  'gallery.hint': 'اضغط على عمود لعرض صور ذلك اليوم.',
+  'gallery.removed': 'حذفها المستخدمون ولا تُعرض',
+  'gallery.empty': 'لا توجد صور لعرضها في هذا اليوم.',
+  'gallery.unknownPlant': 'نبتة غير معروفة',
+  'gallery.previous': 'السابق',
+  'gallery.next': 'التالي',
+  'gallery.photoFailed': 'تعذّر تحميل الصورة.',
 
   'users.title': 'المستخدمون المسجّلون',
   'users.subtitle': 'التسجيلات الجديدة يوميًا',
